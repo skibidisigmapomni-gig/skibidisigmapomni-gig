@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QRadioButton, QButtonGroup
+    QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QRadioButton, QButtonGroup
 )
 from PyQt5.QtCore import Qt
 
@@ -13,7 +13,7 @@ class Quiz(QWidget):
     def init(self):
         self.setupWindow()
         self.loadStyleSheet("style.css")
-        self.loadQuestions(questions) # TODO
+        self.loadQuestions(questions)
         self.init_ui()
 
         return True
@@ -43,6 +43,7 @@ class Quiz(QWidget):
         self.question_label.setWordWrap(True)
         self.layout.addWidget(self.question_label)
 
+        # TODO Добавить сброс выбора при переходе
         # Варианты ответов
         self.radio_group = QButtonGroup()
         self.radio_buttons = []
@@ -113,6 +114,6 @@ if __name__ == "__main__":
         quiz.run()
         quiz.show()
     else:
-        print("Что-то пошло не так")
+        print("Что-то пошло не так :)")
 
     sys.exit(app.exec_())
