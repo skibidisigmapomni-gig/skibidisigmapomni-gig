@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QRadioButton, QButtonGroup
+    QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QRadioButton, QButtonGroup,QAbstractButton
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
