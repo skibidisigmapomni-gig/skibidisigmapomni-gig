@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QRadioButton, QButtonGroup
 )
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
 
 from questions import questions
 
@@ -57,6 +58,12 @@ class Quiz(QWidget):
         self.next_button = QPushButton("Далее")
         self.next_button.clicked.connect(self.next_question)
         self.layout.addWidget(self.next_button, alignment=Qt.AlignCenter)
+
+        # Изображение
+        self.image_label = QLabel()
+        self.pixmap = QPixmap('image.png')
+        self.image_label.setPixmap(self.pixmap.scaledToWidth(600))
+        self.layout.addWidget(self.image_label)
 
         self.setLayout(self.layout)
 
