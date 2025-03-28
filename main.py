@@ -5,16 +5,19 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
-from questions import questions
+from Database import Database
+
+PATH_TO_DATABASE = "Questions"
 
 class Quiz(QWidget):
     def __init__(self):
         super().__init__()
+        self.database = Database(PATH_TO_DATABASE)
 
-    def init(self):
+    def init(self, n):
         self.setupWindow()
         self.loadStyleSheet("style.css")
-        self.loadQuestions(questions)
+        self.loadQuestions(n)
         self.init_ui()
 
         return True
@@ -27,8 +30,8 @@ class Quiz(QWidget):
         with open(path) as stylesheet:
             self.setStyleSheet(stylesheet.read())
     
-    def loadQuestions(self, questions):
-        self.questions = questions
+    def loadQuestions(self, n):
+        self.questions = self.database.getRandomQuestions(n)
         self.current_question_index = 0
         self.user_answers = []
 
@@ -117,7 +120,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     quiz = Quiz()
 
-    if quiz.init():
+    if quiz.init(2):
         quiz.run()
         quiz.show()
     else:

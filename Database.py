@@ -47,8 +47,24 @@ class Database:
         rows = self.cursor.fetchall()
 
         print(f"Got {n} rows")
+        
+        # To dictionary
+        # {
+        #     "question": "Какова формула второго закона Ньютона?",
+        #     "options": ["F = ma", "F = mv", "F = m/a", "F = a/m"],
+        #     "answer": "F = ma"
+        # }
+        answer = []
+        for row in rows:
+            answer.append(
+                {
+                    "question": row[1],
+                    "options": [row[2], row[3], row[4], row[5]],
+                    "answer": row[2]
+                }
+            )
 
-        return rows
+        return answer
 
     def close(self):
         self.instance.close()
