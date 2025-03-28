@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QRadioButton, QButtonGroup,QAbstractButton
+    QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QRadioButton, QButtonGroup,QAbstractButton, QLineEdit
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
@@ -13,14 +13,39 @@ class Quiz(QWidget):
     def __init__(self):
         super().__init__()
         self.database = Database(PATH_TO_DATABASE)
+        self.layout = QVBoxLayout()
+        self.n = 1
 
     def init(self, n):
         self.setupWindow()
         self.loadStyleSheet("style.css")
-        self.loadQuestions(n)
         self.init_ui()
 
         return True
+    def collnumber(self):
+        self.label_collnumber =QLabel("Введите количество задач в тесте:", self)
+        self.layout.addWidget(self.label_collnumber)
+
+        self.lineEditCollNumber = QLineEdit()
+        self.layout.addWidget(self.lineEditCollNumber)
+
+        self.buttonCollNumber = QPushButton("Подтвердить")
+        self.buttonCollNumber.clicked.connect(self.okay)
+        self.layout.addWidget(self.buttonCollNumber)
+
+    def okay(self):
+        if self.lineEditCollNumber.text().isdigit():
+            self.n = int(self.lineEditCollNumber.text())
+        else:
+            self.clearLayout()
+            self.collnumber()
+            return
+        print(f"Entered n: {self.n}")
+        self.clearLayout()
+        self.show_ui()
+
+        self.loadQuestions(self.n)
+        self.load_question()
 
     def setupWindow(self):
         self.setWindowTitle("Тест по физике")
@@ -36,16 +61,14 @@ class Quiz(QWidget):
         self.user_answers = []
 
     def run(self):
-        self.load_question()
+        self.collnumber()
 
     def init_ui(self):
-        self.layout = QVBoxLayout()
-
         # Вопрос
         self.question_label = QLabel()
         self.question_label.setAlignment(Qt.AlignCenter)
         self.question_label.setWordWrap(True)
-        self.layout.addWidget(self.question_label)
+        # self.layout.addWidget(self.question_label)
 
         # TODO Добавить сброс выбора при переходе
         # Варианты ответов
@@ -55,20 +78,22 @@ class Quiz(QWidget):
             radio_button = QRadioButton()
             self.radio_group.addButton(radio_button)
             self.radio_buttons.append(radio_button)
-            self.layout.addWidget(radio_button)
+            # self.layout.addWidget(radio_button)
 
         # Кнопка "Далее"
         self.next_button = QPushButton("Далее")
         self.next_button.clicked.connect(self.next_question)
-        self.layout.addWidget(self.next_button, alignment=Qt.AlignCenter)
-
-        # Изображение
-        self.image_label = QLabel()
-        self.pixmap = QPixmap('image.png')
-        self.image_label.setPixmap(self.pixmap.scaledToWidth(600))
-        self.layout.addWidget(self.image_label)
+        # self.layout.addWidget(self.next_button, alignment=Qt.AlignCenter)
 
         self.setLayout(self.layout)
+    
+    def show_ui(self):
+        self.layout.addWidget(self.question_label)
+        
+        for radio_button in self.radio_buttons:
+            self.layout.addWidget(radio_button)
+        
+        self.layout.addWidget(self.next_button, alignment=Qt.AlignCenter)
 
     def load_question(self):
         if self.current_question_index < len(self.questions):
@@ -114,6 +139,13 @@ class Quiz(QWidget):
         self.next_button.hide()
         for radio_button in self.radio_buttons:
             radio_button.hide()
+
+    def clearLayout(self):
+        while self.layout.count():
+            item = self.layout.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.deleteLater()
 
 
 if __name__ == "__main__":
