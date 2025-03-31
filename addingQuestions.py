@@ -1,6 +1,6 @@
 import random
 
-from Database import Database
+from main import Database
 
 def getRandom(a, b, n=3):
     return random.randint(a, b), random.randint(a, b), random.randint(a, b)
